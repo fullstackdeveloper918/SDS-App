@@ -19,7 +19,10 @@ function App() {
   const [name, setName] = useState('')
   const [productCode, setProductCode] = useState('')
   const [language, setLanguage] = useState('')
-  const [region, setRegion] = useState('')
+  const [region, setRegion] = useState('All');
+
+
+  console.log(data.selected[0].id, 'data me yhi hota hai')
 
   useEffect(() => {
     (async function getProductInfo() {
@@ -50,6 +53,7 @@ function App() {
     // Construct the query string dynamically
     const queryParams = new URLSearchParams({
       name: name,
+      product_id: data.selected[0].id.split('/').pop(),
       product_code: productCode,
       language: language,
       region: region
@@ -75,7 +79,7 @@ function App() {
       }
     >
       <BlockStack>
-        <TextField label="Search String" value={name} onChange={(value) => setName(value)} />
+        <TextField label="Product Name - Supplier Name" value={name} onChange={(value) => setName(value)} />
         <TextField label="Product Code" value={productCode} onChange={(value) => setProductCode(value)}  />
         <Select
           label="Language"
@@ -176,8 +180,12 @@ function App() {
         <Select
           label="Region"
           value={region}
-          onChange={(value) => setRegion(value)}
+          onChange={setRegion}
           options={[
+            {
+              value: "All",
+              label: "All"
+            },
             {
               value: "au",
               label: "Australia",

@@ -18,7 +18,7 @@ export async function loader({ request }) {
 
   // Access token to be added to headers
   const accessToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWFuYmU2OCtuZXRwb3dlcl90ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTc0MjU1MTMzMn0.kCosZku6gxvTIvz_5Je957MVLRh8gMcJWuffR9qH7rA";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWFuYmU2OCtuZXRwb3dlcl90ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTc0MjU1NDQwMH0.wma47s2LnqskpSFVDkN1vroKyWEMM64L-0FZwnCCYs8";
 
   try {
     const res = await fetch(apiUrl, {
@@ -45,18 +45,20 @@ export async function loader({ request }) {
 
 export async function action({ request }) {
   const { session } = await authenticate.admin(request);
+  const url = new URL(request.url);
+  const product_id = url.searchParams.get("product_id");
+  console.log(product_id, 'id m getting')
   const { shop } = session;
   console.log("shop123",shop)
   const formData = await request.formData();
   const customer_id = formData.get("customer_id");
   const sdspdf_id = formData.get("sdspdf_id");
-  const product_id = formData.get("product_id");
+
 
   const accessToken =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWFuYmU2OCtuZXRwb3dlcl90ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTc0MjU1MTMzMn0.kCosZku6gxvTIvz_5Je957MVLRh8gMcJWuffR9qH7rA";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWFuYmU2OCtuZXRwb3dlcl90ZXN0QGdtYWlsLmNvbSIsImV4cCI6MTc0MjU1NDQwMH0.wma47s2LnqskpSFVDkN1vroKyWEMM64L-0FZwnCCYs8";
 
   if (request.method === "POST") {
-    console.log('bcbencho')
     const apiUrl = `https://discovery.sdsmanager.com/webshop/get_permanent_link?customer_id=${customer_id}&sdspdf_id=${sdspdf_id}&product_id=${product_id}`;
     
     try {
@@ -80,10 +82,9 @@ export async function action({ request }) {
 
       try{
         if(description) {
-          console.log('hasShopify')
           let productData = JSON.stringify({
             product: {
-              id: 10099411222839,
+              id: product_id,
               body_html: description, 
             },
           });
@@ -91,7 +92,7 @@ export async function action({ request }) {
           let config = {
             method: "put",
             maxBodyLength: Infinity,
-            url: `https://${shop}/admin/api/2025-01/products/10099411222839.json`,
+            url: `https://${shop}/admin/api/2025-01/products/${product_id}.json`,
             headers: {
               "X-Shopify-Access-Token": session?.accessToken,
               "Content-Type": "application/json",
