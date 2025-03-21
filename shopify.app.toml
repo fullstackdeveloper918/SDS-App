@@ -1,0 +1,37 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "dd252d944ecf6cea474139332ea2b544"
+application_url = "https://voted-fundamentals-trades-today.trycloudflare.com"
+embedded = true
+name = "test_sds"
+handle = "test_sds"
+
+[build]
+include_config_on_deploy = true
+dev_store_url = "rohit-cybersify.myshopify.com"
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-01"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://voted-fundamentals-trades-today.trycloudflare.com/auth/callback",
+  "https://voted-fundamentals-trades-today.trycloudflare.com/auth/shopify/callback",
+  "https://voted-fundamentals-trades-today.trycloudflare.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
